@@ -38,6 +38,11 @@ public class CampusController {
         return "{ \"Amount locals in campus " + name + "\": " + countLocals + " }";
     }
 
+    @GetMapping("/{campusName}/rooms")   //http://localhost:8080/campus/PROXIMUS/rooms
+    public List<Local> getLocalsByCampusName(@PathVariable String campusName) {
+        return campusService.allLocals(campusName);
+    }
+
     @PostMapping //http://localhost:8080/campus
     public Campus addCampus(@RequestBody Campus campus) {
         return campusService.addCampus(campus);

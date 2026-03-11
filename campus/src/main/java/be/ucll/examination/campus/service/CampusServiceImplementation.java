@@ -25,6 +25,15 @@ public class CampusServiceImplementation implements CampusService {
     }
 
     @Override
+    public List<Local> allLocals(String campusName) {
+        Campus campus = campusRepository.findCampusByName(campusName).orElseThrow(
+                CampusNameDoesntExistException::new
+        );
+
+        return campus.getLocals();
+    }
+
+    @Override
     public Campus findCampusByName(String name) {
         return campusRepository.findCampusByName(name).orElseThrow(
                 CampusNameDoesntExistException::new

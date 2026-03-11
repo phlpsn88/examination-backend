@@ -8,6 +8,8 @@ import java.util.List;
 public interface CampusService {
     List<Campus> allCampuses();
 
+    List<Local> allLocals(String campusName);
+
     Campus findCampusByName(String name);
 
     Campus addCampus(Campus campus);
