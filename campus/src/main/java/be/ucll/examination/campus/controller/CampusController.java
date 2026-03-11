@@ -1,0 +1,77 @@
+package be.ucll.examination.campus.controller;
+
+import be.ucll.examination.campus.error.*;
+import be.ucll.examination.campus.model.Campus;
+import be.ucll.examination.campus.service.CampusService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/campus")
+public class CampusController {
+
+    private CampusService campusService;
+
+    @Autowired
+    public CampusController(CampusService campusService) {
+        this.campusService = campusService;
+    }
+
+    @GetMapping
+    public List<Campus> allCampuses() {
+        return this.campusService.allCampuses();
+    }
+
+    @GetMapping("/{campusName}")   //http://localhost:8080/campus/PROXIMUS
+    public Campus getCampusByName(@PathVariable(value = "campusName") String name) {
+        return campusService.findCampusByName(name);
+    }
+
+    @PostMapping //http://localhost:8080/campus
+    public Campus addCampus(@RequestBody Campus campus) {
+        return campusService.addCampus(campus);
+    }
+
+    @PutMapping("/{campusName}")
+    public Campus updateCampus(@PathVariable String campusName,@RequestBody Campus campus) {
+        return campusService.updateCampus(campusName, campus);
+    }
+
+    @DeleteMapping("/{campusName}")
+    public void deleteCampus(@PathVariable String campusName) {
+        campusService.removeCampus(campusName);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({CampusNeedsANameException.class})
+    public FieldMessage handleNameException(CampusNeedsANameException ex) {
+        return new FieldMessage("name", "campus requires a name");
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({CampusNeedsAnAddressException.class})
+    public FieldMessage handleNameException(CampusNeedsAnAddressException ex) {
+        return new FieldMessage("address", "campus requires an address");
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({CampusNeedsParkingSpotsException.class})
+    public FieldMessage handleNameException(CampusNeedsParkingSpotsException ex) {
+        return new FieldMessage("parking spots", "campus requires parking spots");
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({CampusNeedsToBeUniqueException.class})
+    public FieldMessage handleUniqueException(CampusNeedsToBeUniqueException ex) {
+        return new FieldMessage("name", "campus name needs to be unique");
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler({CampusNameDoesntExistException.class})
+    public FieldMessage handlePonyNotFoundException(CampusNameDoesntExistException ex) {
+        return new FieldMessage("name", "Can't find campus with this name");
+    }
+}
