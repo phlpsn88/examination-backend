@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/campus")
@@ -41,6 +42,11 @@ public class CampusController {
     @GetMapping("/{campusName}/rooms")   //http://localhost:8080/campus/PROXIMUS/rooms
     public List<Local> getLocalsByCampusName(@PathVariable String campusName) {
         return campusService.allLocals(campusName);
+    }
+
+    @GetMapping("/{campusName}/rooms/{roomsName}")   //http://localhost:8080/campus/PROXIMUS/rooms
+    public Optional<Local> getLocalByCampusNameAnsLocalName(@PathVariable String campusName, @PathVariable String roomsName) {
+        return campusService.findLocalByCampusAndName(campusName, roomsName);
     }
 
     @PostMapping //http://localhost:8080/campus
@@ -96,7 +102,13 @@ public class CampusController {
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler({CampusNameDoesntExistException.class})
-    public FieldMessage handlePonyNotFoundException(CampusNameDoesntExistException ex) {
+    public FieldMessage handleCampusNotFoundException(CampusNameDoesntExistException ex) {
         return new FieldMessage("name", "Can't find campus with this name");
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler({LocalNameDoesntExistException.class})
+    public FieldMessage handleLocalNotFoundException(LocalNameDoesntExistException ex) {
+        return new FieldMessage("name", "Can't find room with this name in this campus");
     }
 }
