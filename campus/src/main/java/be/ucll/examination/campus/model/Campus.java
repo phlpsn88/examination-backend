@@ -21,6 +21,9 @@ public class Campus {
     @Column(name = "parking_spots")
     private Integer parkingSpots;
 
+    @Transient
+    private int amountLocals;
+
     // CascadeType.ALL -> auto save locals in local tabel
     @OneToMany(mappedBy = "campus", cascade = CascadeType.ALL)
     private List<Local> locals = new ArrayList<>();
@@ -52,6 +55,10 @@ public class Campus {
 
     public Integer getParkingSpots() {
         return parkingSpots;
+    }
+
+    public int getAmountLocals() {
+        return this.getLocals().size();
     }
 
     public void updateNameAddressAndParkingSpots(String name, String address, Integer parkingSpots) {

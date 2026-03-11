@@ -92,8 +92,6 @@ public class CampusServiceImplementation implements CampusService {
                 CampusNameDoesntExistException::new
         );
 
-        List<Local> locals = campus.getLocals();
-
-        return locals.size();
+        return campus.getAmountLocals();
     }
 }
