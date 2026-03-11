@@ -2,6 +2,7 @@ package be.ucll.examination.campus.controller;
 
 import be.ucll.examination.campus.error.*;
 import be.ucll.examination.campus.model.Campus;
+import be.ucll.examination.campus.model.Local;
 import be.ucll.examination.campus.service.CampusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -43,6 +44,12 @@ public class CampusController {
     @DeleteMapping("/{campusName}")
     public void deleteCampus(@PathVariable String campusName) {
         campusService.removeCampus(campusName);
+    }
+
+    @PostMapping("/{campusName}/local")
+    public Local addLocal(@PathVariable String campusName, @RequestBody Local local) {
+        this.campusService.assignLocalToCampus(local, campusName);
+        return local;
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

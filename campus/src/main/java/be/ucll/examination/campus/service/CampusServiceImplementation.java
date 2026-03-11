@@ -2,6 +2,7 @@ package be.ucll.examination.campus.service;
 
 import be.ucll.examination.campus.error.*;
 import be.ucll.examination.campus.model.Campus;
+import be.ucll.examination.campus.model.Local;
 import be.ucll.examination.campus.repository.CampusRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -64,5 +65,16 @@ public class CampusServiceImplementation implements CampusService {
     @Override
     public void removeCampus(String campusName) {
         campusRepository.removeCampus(campusName);
+    }
+
+    @Override
+    public void assignLocalToCampus(Local local, String campusName) {
+        Campus campus = campusRepository.findCampusByName(campusName).orElseThrow(
+                CampusNameDoesntExistException::new
+        );
+
+        campus.addLocal(local);
+
+        campusRepository.saveCampus(campus);
     }
 }
