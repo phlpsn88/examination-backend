@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CampusServiceImplementation implements CampusService {
@@ -85,5 +84,16 @@ public class CampusServiceImplementation implements CampusService {
         campus.addLocal(newLocal);
 
         campusRepository.saveCampus(campus);
+    }
+
+    @Override
+    public int countLocalsInCampus(String campusName) {
+        Campus campus = campusRepository.findCampusByName(campusName).orElseThrow(
+                CampusNameDoesntExistException::new
+        );
+
+        List<Local> locals = campus.getLocals();
+
+        return locals.size();
     }
 }

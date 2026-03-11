@@ -17,4 +17,6 @@ public interface CampusService {
     void removeCampus(String campusName);
 
     void assignLocalToCampus(Local local, String campusName);
+
+    int countLocalsInCampus(String name);
 }
