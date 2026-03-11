@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CampusServiceImplementation implements CampusService {
@@ -68,12 +69,20 @@ public class CampusServiceImplementation implements CampusService {
     }
 
     @Override
-    public void assignLocalToCampus(Local local, String campusName) {
+    public void assignLocalToCampus(Local newLocal, String campusName) {
         Campus campus = campusRepository.findCampusByName(campusName).orElseThrow(
                 CampusNameDoesntExistException::new
         );
 
-        campus.addLocal(local);
+        // Check of de naam van de local al bestaat in deze campus
+        List<Local> campusLocals = campus.getLocals();
+        for (Local local : campusLocals) {
+            if (local.getName().equals(newLocal.getName())) {
+                throw new LocalNeedsToBeUniqueException();
+            }
+        }
+
+        campus.addLocal(newLocal);
 
         campusRepository.saveCampus(campus);
     }

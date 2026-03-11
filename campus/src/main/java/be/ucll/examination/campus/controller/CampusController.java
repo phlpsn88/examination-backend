@@ -76,6 +76,12 @@ public class CampusController {
         return new FieldMessage("name", "campus name needs to be unique");
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({LocalNeedsToBeUniqueException.class})
+    public FieldMessage handleUniqueLocalException(LocalNeedsToBeUniqueException ex) {
+        return new FieldMessage("name", "local name needs to be unique");
+    }
+
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler({CampusNameDoesntExistException.class})
     public FieldMessage handlePonyNotFoundException(CampusNameDoesntExistException ex) {
