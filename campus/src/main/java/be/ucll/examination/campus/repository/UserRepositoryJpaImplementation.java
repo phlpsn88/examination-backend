@@ -31,8 +31,10 @@ public class UserRepositoryJpaImplementation implements UserRepository {
     }
 
     @Override
-    public void addUser(User user) {
+    public User addUser(User user) {
         userJpaRepository.save(user);
+
+        return user;
     }
 
     @Override

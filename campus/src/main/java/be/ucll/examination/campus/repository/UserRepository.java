@@ -11,7 +11,7 @@ public interface UserRepository {
 
     Optional<User> findUserById(long userId);
 
-    void addUser(User user);
+    User addUser(User user);
 
     User updateUser(long userId, User user);
 
